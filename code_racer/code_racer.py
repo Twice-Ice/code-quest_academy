@@ -1,3 +1,6 @@
+# from code_racer_input_generator import writeIT
+
+
 carPos = (0, 0)
 X = 0
 Y = 1
@@ -60,7 +63,8 @@ def printMap(map):
                 print(map[l][w], end="")
         try: 
             map[l].index("X")
-            print("\nYou Crashed - GAME OVER")
+            if crashed == False:
+                print("\nYou Crashed - GAME OVER")
             crashed = True
         except:
             pass
