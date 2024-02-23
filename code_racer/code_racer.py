@@ -48,7 +48,7 @@ def moveCar(map):
         if map[l + 3][carX] == "o":
             map[l + 3][carX] = "X"
         else:
-            map[l + 3][carX] = "v"
+            map[l + 3][carX] = "v" # this line of code is the problem child. IDFK WHYY AHHHHHHHHHHHHHHH
 
     return map
 
