@@ -8,6 +8,7 @@ def checkSpot(board, y, x, sign = "X"):
         board[y][x] = sign
     return board
 
+'''generates a blank board filled with "."'''
 def generateBoard():
     board = []
     for y in range(8):
@@ -165,6 +166,15 @@ def pawn(badBoard, yPos, xPos, bw):
 
     return badBoard
 
+def pieceDefended(board, pieceY, pieceX, opposite):
+    pieceFound = False
+    for y in range(8):
+        for x in range(8):
+            boardCheck = pieceLogic(board, y, x)
+            if boardCheck[opposite][pieceY][pieceX] == "X" and not pieceX:
+                pieceFound = True
+    return pieceFound
+
 def checkmate(board, badBoard, bw):
     #logic needs to be rewritten to accound for cases where the king is surrounded by attacks and enemies, but can attack those enemies.
     #The current logic doesn't account for those senarios.
@@ -182,6 +192,23 @@ def checkmate(board, badBoard, bw):
     4. if the spot is filled check if the spot is defended. If not, the king can move there so return False.
     5. else if it's defended, repeat step 4 for all spaces the king can move to.
     6. if the king can't move to any of the spots, then return True. The king is in checkmate.
+
+    
+    pseudocode #2:
+    how to check the king's surroundings:
+    1. calculate all incoming attacks for all pieces.
+    2. if any of the king's surroundings aren't under attack, then the king can move there and you return False.
+
+    how to check the king's position:
+    1. get a list of all pieces attacking the king's position
+    2. if there are 2 or more pieces attacking the king's position, the king is in checkmate. Return True.
+    3. if there is only one piece attacking the king's position do the following:
+    4. check the location of the piece attacking the king, and see if that piece is under attack.
+    5. if that piece is under attack, return False because that piece can be killed and get the king out of checkmate.
+    6. else: if the piece is a bishop, rook, or queen, loop through each attack position of the piece;
+    7. if another piece can move into the way of any of the attack positions, create a board where that is the case.
+        (for each attack position, check each opposing piece to see if a piece can move there.)
+    8. then check the king's position to see if it's still under attack.
     '''
     #define which king you're looking for
     if bw == "b":
@@ -201,12 +228,11 @@ def checkmate(board, badBoard, bw):
                 kingX = x
                 kingY = y
     
+    
+
     #checks king's center pos
-    for y in range(8):
-        for x in range(8):
-            boardCheck = pieceLogic(board, y, x)
-            if boardCheck[opposite][kingY][kingX] == "X":
-                print(f"The king ({check}) has died to the piece at {x}, {y}")
+    if pieceDefended(board, kingY, kingX, opposite):
+        print(f"The king ({check}) has died to the piece at {kingX}, {kingY}")
 
 def pieceLogic(board, y, x):
     blackSpots, whiteSpots = generateBoard(), generateBoard()
